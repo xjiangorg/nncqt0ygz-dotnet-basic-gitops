@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nncqt0ygz-dotnet-basic-stage
+  namespace: rhtap
+  finalizers: ["resources-finalizer.argocd.argoproj.io"] 
+spec:
+  project: default
+  source:
+    path: ./components/nncqt0ygz-dotnet-basic/overlays/stage
+    repoURL: https://github.com/xjiangorg/nncqt0ygz-dotnet-basic-gitops.git
+    targetRevision: main
+  destination:
+    namespace: rhtap-app-stage
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    managedNamespaceMetadata:
+      labels: 
+        argocd.argoproj.io/managed-by: rhtap
+    automated: 
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+
